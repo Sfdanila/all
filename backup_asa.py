@@ -5,7 +5,7 @@ import sys, time, paramiko, os, cmd, datetime, fileinput
 
 now = datetime.datetime.now()
 import time
-print ("===========[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Подключение к FTP серверу ]=============================")
+print ("[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Подключение к FTP серверу ]=============================")
 ftp = FTP()
 ftp.set_debuglevel(0)
 ftp.connect('ftp_server', 21)
@@ -19,7 +19,7 @@ save_path = '/path_to_backup/'
 f0 = open('ip_asa')
 for ip in f0.readlines():
         ip = ip.strip()
-        print("===========[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Подключение к ASA: "+ip +" ]")
+        print("[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Подключение к ASA: "+ip +" ]")
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(ip,port, user, password, look_for_keys=False)
@@ -29,7 +29,7 @@ for ip in f0.readlines():
 #      chan.send('enable\n')
 #      chan.send(enable_password +'\n')
 ########################################
-        print("===========[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Получение конфигурации ASA: "+ip +" ]")
+        print("[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Получение конфигурации ASA: "+ip +" ]")
         time.sleep(1)
         chan.send('terminal pager 0\n')
         time.sleep(1)
@@ -44,12 +44,12 @@ for ip in f0.readlines():
             f.pop(i)
         with open(filename,'w') as F:
             F.writelines(f)
-        print("===========[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Загрузка конфигурации ASA: "+ip +" на FTP сервер]")
+        print("[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Загрузка конфигурации ASA: "+ip +" на FTP сервер]")
         fp = open(filename, 'rb')
         ftp.storbinary('STOR %s' % os.path.basename(filename), fp, 1024)
         fp.close()
         f1.close()
         ssh.close()
         f0.close()
-print ("===========[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Резервное копирование конфигураций завершено! ]")
+print ("[ "+time.strftime(r"%d.%m.%Y %H:%M:%S", time.localtime()) +" Резервное копирование конфигураций завершено! ]")
 print("=========================================================================================")
